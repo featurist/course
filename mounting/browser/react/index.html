@@ -14,21 +14,25 @@
 			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
 		</footer>
 
-    <script type="text/babel" data-presets="es2015,stage-2"></script>
-		<script src="node_modules/babel-standalone/babel.js"></script>
+    <script>console.log('loading here #1')</script>
+
 		<script src="node_modules/todomvc-common/base.js"></script>
 		<script src="node_modules/react/dist/react-with-addons.js"></script>
 		<script src="node_modules/react-dom/dist/react-dom.js"></script>
 		<script src="node_modules/classnames/index.js"></script>
 		<script src="node_modules/director/build/director.js"></script>
 
-		<script src="js/utils.js"></script>
-		<script src="js/todoModel.js"></script>
+    <script>console.log('loading here #2')</script>
+
+		<script src="out/utils.js"></script>
+		<script src="out/todoModel.js"></script>
 		<!-- jsx is an optional syntactic sugar that transforms methods in React's
 		`render` into an HTML-looking format. Since the two models above are
 		unrelated to React, we didn't need those transforms. -->
-		<script type="text/jsx" src="js/todoItem.jsx"></script>
-		<script type="text/jsx" src="js/footer.jsx"></script>
-		<script type="text/jsx" src="js/app.jsx"></script>
+		<script src="out/todoItem.js"></script>
+		<script src="out/footer.js"></script>
+		<script src="out/app.js"></script>
+
+    <script>console.log('loading here #3')</script>
 	</body>
 </html>
