@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "electron-mocha test --renderer --interactive"
+    "test": "electron-mocha test --renderer --timeout=0"
   },
   "author": "",
   "license": "ISC",
