@@ -1,7 +1,6 @@
 /* eslint-env mocha */
 
 const AppService = require('../services/appService')
-const mountIFrame = require('browser-monkey/iframe')
 
 describe('app', () => {
   let service
@@ -74,20 +73,20 @@ describe('app', () => {
   })
 
   it('can display all artists', async () => {
-    var browser = mountIFrame(service.url)
+    const browser = service.mount()
     await browser.shouldHave({text: 'Discology'})
     await browser.shouldHave({text: 'LTJ Bukem'})
     await browser.shouldHave({text: 'DJ Shadow'})
   })
 
   it('can display an artist', async () => {
-    var browser = mountIFrame(service.url)
+    const browser = service.mount()
     await browser.find('.artist a', {text: 'LTJ Bukem'}).click()
     await browser.shouldHave({text: 'Journey Inwards'})
   })
 
   it('can display a release', async () => {
-    var browser = mountIFrame(service.url)
+    const browser = service.mount()
     await browser.find('.artist a', {text: 'LTJ Bukem'}).click()
     await browser.find('.release a', {text: 'Journey Inwards'}).click()
     await browser.shouldHave({text: 'Watercolours'})
