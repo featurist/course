@@ -8,23 +8,16 @@ module.exports = function ({db} = {}) {
   app.get('/index.js', browserify(pathUtils.join(__dirname, '../browser/index.js'), {
     transform: ['babelify'],
     extensions: ['.jsx'],
+    debug: true,
     fullPaths: true
   }))
-
-  app.get('/', (req, res) => {
-    res.send(`<html>
-    <body>
-      <script src="/index.js"></script>
-    </body>
-  </html>`)
-  })
 
   app.get('/api/artists', async (req, res) => {
     res.send(await db.artists())
   })
 
   app.get('/api/artists/:artistId', async (req, res) => {
-    const artist = await db.artist(req.params.artistId)
+    const artist = await db.artist(Number(req.params.artistId))
     if (artist) {
       res.send(artist)
     } else {
@@ -33,12 +26,20 @@ module.exports = function ({db} = {}) {
   })
 
   app.get('/api/releases/:releaseId', async (req, res) => {
-    const release = await db.release(req.params.releaseId)
+    const release = await db.release(Number(req.params.releaseId))
     if (release) {
       res.send(release)
     } else {
       res.status(404).send('no such release')
     }
+  })
+
+  app.get('/*', (req, res) => {
+    res.send(`<html>
+    <body>
+      <script src="/index.js"></script>
+    </body>
+  </html>`)
   })
 
   return app

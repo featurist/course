@@ -6,9 +6,6 @@ describe('app', () => {
   let service
 
   beforeEach(async () => {
-    if (service) {
-      await service.stop()
-    }
     service = new AppService({
       data: {
         releases: [
@@ -70,6 +67,10 @@ describe('app', () => {
       }
     })
     await service.start()
+  })
+
+  afterEach(() => {
+    return service.stop()
   })
 
   it('can display all artists', async () => {

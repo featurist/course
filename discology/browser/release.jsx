@@ -1,6 +1,7 @@
 const hyperdom = require('hyperdom')
 const httpism = require('httpism')
 const routes = require('./routes')
+const formatDuration = require('format-duration')
 
 module.exports = class Release {
   routes () {
@@ -20,7 +21,12 @@ module.exports = class Release {
       return <div>
         <h1>{this.release.name}</h1>
         <ul>
-          { this.release.tracks.map(track => <li>{track.name}</li>) }
+          {
+            this.release.tracks.map(track => <li class="release-track">
+              <span class="release-trackName">{track.name}</span>
+              <span class="release-trackDuration">{formatDuration(track.duration * 1000)}</span>
+            </li>)
+          }
         </ul>
       </div>
     }

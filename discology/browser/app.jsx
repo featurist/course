@@ -1,6 +1,7 @@
 const hyperdom = require('hyperdom')
 const httpism = require('httpism')
 const Artist = require('./artist')
+const Release = require('./release')
 
 const routes = require('./routes')
 
@@ -8,6 +9,7 @@ module.exports = class App {
   constructor () {
     this.artists = []
     this.artist = new Artist()
+    this.release = new Release()
   }
 
   async onload () {
@@ -20,7 +22,8 @@ module.exports = class App {
         render: () => this
       }),
 
-      this.artist
+      this.artist,
+      this.release
     ]
   }
 
