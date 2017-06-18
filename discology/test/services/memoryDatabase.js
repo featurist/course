@@ -2,6 +2,12 @@ const _ = require('underscore')
 
 module.exports = class MemoryDatabase {
   constructor ({data} = {}) {
+    if (data) {
+      this.write(data)
+    }
+  }
+
+  write (data) {
     this.data = data
     this.artistsById = indexByArtists(data)
     this.releasesById = _.indexBy(data.releases, 'id')
