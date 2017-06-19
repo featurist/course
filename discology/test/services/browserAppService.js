@@ -25,5 +25,6 @@ module.exports = class MockAppService {
   }
 
   stop () {
+    vinehill.remove()
   }
 }

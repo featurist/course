@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "TEST_CONFIG=full electron-mocha --renderer test/browser && npm run test-unit && npm run eslint",
-    "test-browser": "TEST_CONFIG=browser electron-mocha -r babel-core/register --renderer test/browser",
-    "test-full": "TEST_CONFIG=full electron-mocha --renderer test/browser",
+    "test": "npm run test-app && npm run test-unit && npm run eslint",
+    "test-app": "electron-mocha -r babel-core/register --renderer test/browser",
+    "test-app-browser": "npm run test-app -- -f '#browser'",
+    "test-app-full": "npm run test-app -- -f '#full'",
     "test-unit": "mocha test/unit",
     "eslint": "eslint --ext .js --ext .jsx ."
   },
@@ -30,6 +31,7 @@
     "disconnect": "1.1.0",
     "electron": "1.6.10",
     "electron-mocha": "3.4.0",
+    "electron-rebuild": "1.5.11",
     "eslint": "3.19.0",
     "eslint-config-standard": "10.2.1",
     "eslint-plugin-hyperdom": "1.0.0",

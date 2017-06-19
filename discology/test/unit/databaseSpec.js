@@ -7,7 +7,7 @@ const pathUtils = require('path')
 const fs = require('mz/fs')
 
 function describeDatabase (name, createDatabase) {
-  context(`with database ${name}`, () => {
+  context(`${name} database`, () => {
     let database
 
     beforeEach(async () => {
@@ -219,8 +219,8 @@ function clone (x) {
   return JSON.parse(JSON.stringify(x))
 }
 
-describeDatabase('memory', () => new MemoryDatabase())
-describeDatabase('sql', async () => {
+describeDatabase('#memory', () => new MemoryDatabase())
+describeDatabase('#sql', async () => {
   const dbFilename = pathUtils.join(__dirname, '/test.db')
   if (await fs.exists(dbFilename)) {
     await fs.unlink(dbFilename)

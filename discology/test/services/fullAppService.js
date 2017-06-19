@@ -1,18 +1,27 @@
 const createApp = require('../../server/app')
 const serverDestroy = require('server-destroy')
 const httpism = require('httpism')
-const MemoryDatabase = require('./memoryDatabase')
+const SqlDatabase = require('../../server/sqlDatabase')
 const urlUtils = require('url')
+const pathUtils = require('path')
 const mountIFrame = require('browser-monkey/iframe')
+const fs = require('mz/fs')
 
 module.exports = class AppService {
   constructor ({port = 7000, data} = {}) {
     this.port = port
-    this.db = new MemoryDatabase({data})
+    this.data = data
   }
 
   async start () {
-    this.server = createApp({db: this.db}).listen(this.port)
+    const dbFilename = pathUtils.join(__dirname, 'test.db')
+    if (await fs.exists(dbFilename)) {
+      await fs.unlink(dbFilename)
+    }
+    const db = new SqlDatabase({driver: 'sqlite', url: dbFilename})
+    await db.createSchema()
+    await db.write(this.data)
+    this.server = createApp({db}).listen(this.port)
     this.url = `http://localhost:${this.port}/`
     serverDestroy(this.server)
     await httpism.client(this.url).get('/index.js')

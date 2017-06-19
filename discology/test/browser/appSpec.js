@@ -1,10 +1,9 @@
 /* eslint-env mocha */
 
-const AppService = require('../services/appService')
+const describeApp = require('../services/describeApp')
 
-describe('app', () => {
+describeApp('app', (AppService) => {
   let service
-
   beforeEach(async () => {
     service = new AppService({
       data: {

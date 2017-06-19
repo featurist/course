@@ -1,11 +1,11 @@
 /* eslint-env mocha */
 
-const AppService = require('../services/appService')
+const describeApp = require('../services/describeApp')
 const routes = require('../../browser/routes')
 const expect = require('chai').expect
 const $ = require('jquery')
 
-describe('release page', () => {
+describeApp('release page', (AppService) => {
   let service
 
   beforeEach(async () => {
