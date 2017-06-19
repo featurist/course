@@ -1,14 +1,17 @@
 const hyperdom = require('hyperdom')
-const httpism = require('httpism')
 const routes = require('./routes')
 const formatDuration = require('format-duration')
 
 module.exports = class Release {
+  constructor ({serverApi} = {}) {
+    this.serverApi = serverApi
+  }
+
   routes () {
     return [
       routes.release({
         onload: async ({releaseId}) => {
-          this.release = await httpism.get('/api/releases/:releaseId', {params: {releaseId}})
+          this.release = await this.serverApi.release(releaseId)
         },
 
         render: () => this

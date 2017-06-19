@@ -1,19 +1,20 @@
 const hyperdom = require('hyperdom')
-const httpism = require('httpism')
 const Artist = require('./artist')
 const Release = require('./release')
+const HttpServerApi = require('./httpServerApi')
 
 const routes = require('./routes')
 
 module.exports = class App {
-  constructor () {
+  constructor ({serverApi = new HttpServerApi()} = {}) {
     this.artists = []
-    this.artist = new Artist()
-    this.release = new Release()
+    this.artist = new Artist({serverApi})
+    this.release = new Release({serverApi})
+    this.serverApi = serverApi
   }
 
   async onload () {
-    this.artists = await httpism.get('/api/artists')
+    this.artists = await this.serverApi.artists()
   }
 
   routes () {
