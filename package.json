@@ -35,7 +35,7 @@
     "disconnect": "1.1.0",
     "electron": "1.6.10",
     "electron-mocha": "3.4.0",
-    "electron-rebuild": "1.5.11",
+    "electron-rebuild": "github:featurist/electron-rebuild#prepare",
     "eslint": "3.19.0",
     "eslint-config-standard": "10.2.1",
     "eslint-plugin-hyperdom": "1.0.0",
