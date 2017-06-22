@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "browser-monkey": "2.5.0",
+    "chai": "^4.0.2",
     "disconnect": "1.1.0",
     "electron": "1.6.10",
     "electron-mocha": "3.4.0",
