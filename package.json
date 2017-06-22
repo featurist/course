@@ -45,6 +45,7 @@
     "eslint-plugin-promise": "3.5.0",
     "eslint-plugin-standard": "3.0.1",
     "jquery": "3.2.1",
+    "mocha": "3.4.2",
     "server-destroy": "1.0.1",
     "vinehill": "0.13.0"
   },
