@@ -1,13 +1,56 @@
 {
-  "name": "course",
+  "name": "discology",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
+  "engine": {
+    "node": ">=7.10.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test-app && npm run test-unit && npm run eslint",
+    "test-app": "./electron-mocha test/browser",
+    "test-app-browser": "npm run test-app -- -f '#browser'",
+    "test-app-full": "npm run test-app -- -f '#full'",
+    "test-unit": "mocha test/unit",
+    "eslint": "eslint --ext .js --ext .jsx .",
+    "postinstall": "if [ \"$NODE_ENV\" != \"production\" ] ; then electron-rebuild; fi"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "babel-core": "6.24.1",
+    "babel-preset-hyperdom": "^1.4.0",
+    "babelify": "7.3.0",
+    "browserify-middleware": "7.1.0",
+    "express": "4.15.3",
+    "format-duration": "1.0.0",
+    "httpism": "3.2.0",
+    "hyperdom": "0.9.0",
+    "mz": "2.6.0",
+    "sqlite3": "3.1.8",
+    "sworm": "3.7.0",
+    "underscore": "1.8.3"
+  },
+  "devDependencies": {
+    "browser-monkey": "2.5.0",
+    "chai": "^4.0.2",
+    "disconnect": "1.1.0",
+    "electron": "1.6.10",
+    "electron-mocha": "3.4.0",
+    "electron-rebuild": "github:featurist/electron-rebuild#prepare",
+    "eslint": "3.19.0",
+    "eslint-config-standard": "10.2.1",
+    "eslint-plugin-hyperdom": "1.0.0",
+    "eslint-plugin-import": "2.3.0",
+    "eslint-plugin-node": "4.2.2",
+    "eslint-plugin-promise": "3.5.0",
+    "eslint-plugin-standard": "3.0.1",
+    "jquery": "3.2.1",
+    "mocha": "3.4.2",
+    "server-destroy": "1.0.1",
+    "vinehill": "0.13.0"
+  },
+  "description": "",
+  "babel": {
+    "presets": "hyperdom"
+  }
 }
