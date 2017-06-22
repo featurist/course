@@ -10,5 +10,8 @@
     "no-console": "error",
     "prefer-const": "error",
     "no-var": "error",
+  },
+  "env": {
+    "mocha": true
   }
 }
