@@ -18,7 +18,7 @@ module.exports = class SqlDatabase {
     await this.db.query(`
       create table artists (id, name, release_id);
       create table releases (id, name);
-      create table tracks (id integer primary key, name, duration, release_id);
+      create table tracks (id integer primary key, name, number, duration, release_id);
     `, undefined, {multiline: true})
   }
 
@@ -29,10 +29,11 @@ module.exports = class SqlDatabase {
   async write (data) {
     const releases = data.releases.map(release => {
       const tracks = release.tracks
-        ? (r) => release.tracks.map(t => this.schema.track({
+        ? (r) => release.tracks.map((t, index) => this.schema.track({
           name: t.name,
           release: r,
-          duration: t.duration
+          duration: t.duration,
+          number: index + 1
         }))
         : undefined
 
@@ -87,6 +88,7 @@ module.exports = class SqlDatabase {
             on t.release_id = r.id
       where
         r.id = @id
+      order by r.name, a.name, t.number
     `, {id: id}))[0]
 
     release.tracks.forEach(track => delete track.id)
@@ -139,6 +141,7 @@ module.exports = class SqlDatabase {
             on t.release_id = r.id
       where
         a.id = @id
+      order by a.name, r.name, ra.name, t.number
     `, {id: id}))[0]
 
     artist.releases.forEach(release => release.tracks.forEach(track => delete track.id))

@@ -75,7 +75,8 @@ module.exports = function (databaseService) {
               }
             ],
             tracks: [
-              {name: 'one: track 1', duration: 30}
+              {name: 'xxx one: track 1', duration: 30},
+              {name: 'aaa one: track 2', duration: 30}
             ]
           },
           {
@@ -115,7 +116,8 @@ module.exports = function (databaseService) {
               }
             ],
             tracks: [
-              {name: 'one: track 1', duration: 30}
+              {name: 'xxx one: track 1', duration: 30},
+              {name: 'aaa one: track 2', duration: 30}
             ]
           },
           {
@@ -155,7 +157,8 @@ module.exports = function (databaseService) {
               }
             ],
             tracks: [
-              {name: 'one: track 1', duration: 30}
+              {name: 'xxx one: track 1', duration: 30},
+              {name: 'aaa one: track 2', duration: 30}
             ]
           }
         ]
@@ -189,7 +192,8 @@ module.exports = function (databaseService) {
             }
           ],
           tracks: [
-            {name: 'two: track 1', duration: 30}
+            {name: 'xxx two: track 1', duration: 30},
+            {name: 'aaa two: track 1', duration: 30}
           ]
         }
       ]
@@ -207,7 +211,8 @@ module.exports = function (databaseService) {
         }
       ],
       tracks: [
-        {name: 'two: track 1', duration: 30}
+        {name: 'xxx two: track 1', duration: 30},
+        {name: 'aaa two: track 1', duration: 30}
       ]
     })
   })
