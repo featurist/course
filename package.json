@@ -12,7 +12,7 @@
     "test-app-full": "npm run test-app -- -f '#full'",
     "test-unit": "mocha test/unit",
     "eslint": "eslint --ext .js --ext .jsx .",
-    "postinstall": "if [ \"$NODE_ENV\" != \"production\" ] ; then electron-rebuild; fi"
+    "postinstall": "if [ \"$NODE_ENV\" != \"production\" ] ; then electron-rebuild -s; fi"
   },
   "author": "",
   "license": "ISC",
