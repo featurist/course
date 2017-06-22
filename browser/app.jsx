@@ -28,9 +28,15 @@ module.exports = class App {
     ]
   }
 
+  async import () {
+    await this.serverApi.import(this.importUrl)
+  }
+
   render () {
     return <div>
       <h1>Discology</h1>
+      <input class="import-url" type="text" binding="this.importUrl"/>
+      <button class="import-button" onclick={() => this.import()}>import</button>
       <ul>
         { this.artists.map(a => <li class="artist"><a href={routes.artist.href({artistId: a.id})}>{a.name}</a></li>) }
       </ul>
