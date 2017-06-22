@@ -2,13 +2,17 @@
   "name": "discology",
   "version": "1.0.0",
   "main": "index.js",
+  "engine": {
+    "node": ">=7.10.0"
+  },
   "scripts": {
     "test": "npm run test-app && npm run test-unit && npm run eslint",
     "test-app": "./electron-mocha test/browser",
     "test-app-browser": "npm run test-app -- -f '#browser'",
     "test-app-full": "npm run test-app -- -f '#full'",
     "test-unit": "mocha test/unit",
-    "eslint": "eslint --ext .js --ext .jsx ."
+    "eslint": "eslint --ext .js --ext .jsx .",
+    "postinstall": "if [ \"$NODE_ENV\" != \"production\" ] ; then electron-rebuild; fi"
   },
   "author": "",
   "license": "ISC",
