@@ -10,6 +10,10 @@ module.exports = class SqlDatabase {
     }
   }
 
+  stop () {
+    this.db.close()
+  }
+
   async createSchema () {
     await this.db.query(`
       create table artists (id, name, release_id);

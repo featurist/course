@@ -1,15 +1,19 @@
 const httpism = require('httpism')
 
 module.exports = class HttpServerApi {
+  constructor ({http = httpism} = {}) {
+    this.http = http
+  }
+
   artists () {
-    return httpism.get('/api/artists')
+    return this.http.get('/api/artists')
   }
 
   artist (id) {
-    return httpism.get('/api/artists/:artistId', {params: {artistId: id}})
+    return this.http.get('/api/artists/:artistId', {params: {artistId: id}})
   }
 
   release (id) {
-    return httpism.get('/api/releases/:releaseId', {params: {releaseId: id}})
+    return this.http.get('/api/releases/:releaseId', {params: {releaseId: id}})
   }
 }

@@ -2,10 +2,9 @@
 
 const describeApp = require('../services/describeApp')
 
-describeApp('app', (AppService) => {
-  let service
+describeApp('app', (appService) => {
   beforeEach(async () => {
-    service = new AppService({
+    await appService.start({
       data: {
         releases: [
           {
@@ -65,28 +64,27 @@ describeApp('app', (AppService) => {
         ]
       }
     })
-    await service.start()
   })
 
   afterEach(() => {
-    return service.stop()
+    return appService.stop()
   })
 
   it('can display all artists', async () => {
-    const browser = service.mount()
+    const browser = appService.mount()
     await browser.shouldHave({text: 'Discology'})
     await browser.shouldHave({text: 'LTJ Bukem'})
     await browser.shouldHave({text: 'DJ Shadow'})
   })
 
   it('can display an artist', async () => {
-    const browser = service.mount()
+    const browser = appService.mount()
     await browser.find('.artist a', {text: 'LTJ Bukem'}).click()
     await browser.shouldHave({text: 'Journey Inwards'})
   })
 
   it('can display a release', async () => {
-    const browser = service.mount()
+    const browser = appService.mount()
     await browser.find('.artist a', {text: 'LTJ Bukem'}).click()
     await browser.find('.release a', {text: 'Journey Inwards'}).click()
     await browser.shouldHave({text: 'Watercolours'})

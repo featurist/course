@@ -6,14 +6,11 @@ const router = require('hyperdom/router')
 
 require('browser-monkey/lib/reloadButton')()
 
-module.exports = class MockAppService {
-  constructor ({data} = {}) {
+module.exports = class BrowserAppService {
+  async start ({data} = {}) {
     const db = new MemoryDatabase({data})
     this.app = new App({serverApi: new MemoryServerApi({db})})
     this.router = router
-  }
-
-  async start () {
   }
 
   mount (path = '/') {

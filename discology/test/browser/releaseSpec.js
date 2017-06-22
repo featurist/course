@@ -5,11 +5,9 @@ const routes = require('../../browser/routes')
 const expect = require('chai').expect
 const $ = require('jquery')
 
-describeApp('release page', (AppService) => {
-  let service
-
+describeApp('release page', (appService) => {
   beforeEach(async () => {
-    service = new AppService({
+    await appService.start({
       data: {
         releases: [
           {
@@ -29,15 +27,14 @@ describeApp('release page', (AppService) => {
         ]
       }
     })
-    await service.start()
   })
 
   afterEach(() => {
-    return service.stop()
+    return appService.stop()
   })
 
   it('shows all tracks with their durations', async () => {
-    const app = service.mount(routes.release.url({releaseId: '1'}))
+    const app = appService.mount(routes.release.url({releaseId: '1'}))
     await app.find('.release-track').shouldHaveElements(trackElements => {
       const tracks = trackElements.map(track => {
         return {
