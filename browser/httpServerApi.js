@@ -17,7 +17,7 @@ module.exports = class HttpServerApi {
     return this.http.get('/api/releases/:releaseId', {params: {releaseId: id}})
   }
 
-  import (artistId) {
-    this.http.post('/api/import/:artistId', {params: {artistId}})
+  import (id) {
+    return this.http.post('/api/import/:artistId', {}, {params: {artistId: id}})
   }
 }

@@ -26,10 +26,12 @@ class HttpApiService {
   async create () {
     this.sqlDatabaseService = new SqlDatabaseService()
     this.db = await this.sqlDatabaseService.create()
-    this.server = createApp({
-      db: this.db,
-      discogsUrl: 'http://localhost:6789/'
-    }).listen(4567)
+    await new Promise(resolve => {
+      this.server = createApp({
+        db: this.db,
+        discogsUrl: 'http://localhost:6789/'
+      }).listen(4567, resolve)
+    })
     return new HttpServerApi({
       http: httpism.client('http://localhost:4567/')
     })
@@ -41,7 +43,9 @@ class HttpApiService {
 
   async stop () {
     await this.sqlDatabaseService.stop()
-    this.server.close()
+    await new Promise(resolve => {
+      this.server.close(resolve)
+    })
   }
 }
 
@@ -62,13 +66,23 @@ class DiscogsService {
       res.send(db.artists[req.params.artistId])
     })
 
-    this.server = app.listen(6789)
+    app.get('/artists/:artistId/releases', (req, res) => {
+      res.send({
+        releases: db.artists[req.params.artistId].releases
+      })
+    })
+
+    await new Promise(resolve => {
+      this.server = app.listen(6789, resolve)
+    })
 
     return api
   }
 
   async stop () {
-    this.server.close()
+    await new Promise(resolve => {
+      this.server.close(resolve)
+    })
   }
 }
 describe('server api', function () {

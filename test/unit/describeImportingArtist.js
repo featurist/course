@@ -1,3 +1,5 @@
+const expect = require('chai').expect
+
 const discogsApi = {
   addArtist (id, data) {
   }
@@ -10,8 +12,10 @@ module.exports = function describeImportingArtist (apiService, discogsService) {
     beforeEach(async () => {
       serverApi = await apiService.create()
       discogsApi = await discogsService.create()
+
       discogsApi.addArtist(1814667, {
-        name: 'whatever'
+        name: 'Polysick',
+        releases: []
       })
     })
 
@@ -24,6 +28,8 @@ module.exports = function describeImportingArtist (apiService, discogsService) {
       const artist = await serverApi.import(1814667)
 
       expect(artist).to.eql({
+        name: 'Polysick',
+        releases: []
       })
     })
   }) 

@@ -1,9 +1,9 @@
 const httpism = require('httpism')
 
 module.exports = class DiscogsApi {
-  constructor ({http = httpism}) {
+  constructor ({url = 'https://api.discogs.com/', http = httpism}) {
     this.http = http.client(
-      'https://api.discogs.com/',
+      url,
       {
         headers: {
           'user-agent': 'HyperDiscology 1.0'

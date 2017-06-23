@@ -37,7 +37,7 @@ module.exports = function ({db, discogsUrl} = {}) {
   })
 
   app.post('/api/import/:artistId', async (req, res) => {
-    res.send(discogs.artist(req.params.artistId))
+    res.send(await discogs.artist(req.params.artistId))
   })
 
   app.get('/*', (req, res) => {
