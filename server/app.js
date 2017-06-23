@@ -1,9 +1,11 @@
 const express = require('express')
 const browserify = require('browserify-middleware')
 const pathUtils = require('path')
+const DiscogsApi = require('./discogsApi')
 
-module.exports = function ({db} = {}) {
+module.exports = function ({db, discogsUrl} = {}) {
   const app = express()
+  const discogs = new DiscogsApi({url: discogsUrl})
 
   app.get('/index.js', browserify(pathUtils.join(__dirname, '../browser/index.js'), {
     transform: ['babelify'],
@@ -32,6 +34,10 @@ module.exports = function ({db} = {}) {
     } else {
       res.status(404).send('no such release')
     }
+  })
+
+  app.post('/api/import/:artistId', async (req, res) => {
+    res.send(discogs.artist(req.params.artistId))
   })
 
   app.get('/*', (req, res) => {
