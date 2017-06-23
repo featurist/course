@@ -1,0 +1,25 @@
+{
+  "statusCode": 200,
+  "statusText": "OK",
+  "url": "https://api.discogs.com/masters/446546",
+  "headers": {
+    "server": "nginx",
+    "date": "Fri, 23 Jun 2017 12:15:43 GMT",
+    "content-type": "application/json",
+    "content-length": "2998",
+    "connection": "close",
+    "vary": "Accept-Encoding",
+    "access-control-allow-headers": "Content-Type, authorization",
+    "access-control-allow-methods": "GET,PUT,POST,DELETE,PATCH",
+    "x-discogs-media-type": "discogs.v2.1.0",
+    "access-control-allow-origin": "*",
+    "x-frame-options": "SAMEORIGIN",
+    "x-xss-protection": "1; mode=block",
+    "x-content-type-options": "nosniff",
+    "cache-control": "public, must-revalidate",
+    "strict-transport-security": "max-age=16000000",
+    "x-discogs-ratelimit": "25",
+    "x-discogs-ratelimit-used": "9",
+    "x-discogs-ratelimit-remaining": "16"
+  }
+}

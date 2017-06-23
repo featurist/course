@@ -1,11 +1,15 @@
 const expect = require('chai').expect
+const httpism = require('httpism')
 const DiscogsApi = require('../../server/discogsApi')
+const cache = require('httpism/middleware/cache')
 
 describe('discogs', () => {
   let discogsApi
 
   beforeEach(() => {
-    discogsApi = new DiscogsApi()
+    discogsApi = new DiscogsApi({
+      http: httpism.client(cache({url: `${__dirname}/discogs-cache`}))
+    })
   })
 
   it('can download an artist', async () => {
@@ -13,6 +17,7 @@ describe('discogs', () => {
     expect(artist.releases.length).to.equal(7)
     artist.releases = [artist.releases[0]]
     expect(artist).to.eql({
+      id: 1814667,
       name: 'Polysick',
       releases: [
         {

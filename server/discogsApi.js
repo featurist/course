@@ -1,18 +1,14 @@
 const httpism = require('httpism')
 
 module.exports = class DiscogsApi {
-  constructor () {
-    const cache = require('../../httpism/middleware/cache')
-    this.http = httpism.client(
+  constructor ({http = httpism}) {
+    this.http = http.client(
       'https://api.discogs.com/',
       {
         headers: {
           'user-agent': 'HyperDiscology 1.0'
         }
-      },
-      [
-        cache({url: `${__dirname}/discogs`})
-      ]
+      }
     )
   }
 
@@ -39,6 +35,7 @@ module.exports = class DiscogsApi {
     })
 
     return {
+      id: artist.id,
       name: artist.name,
       releases
     }
