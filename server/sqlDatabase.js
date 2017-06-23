@@ -14,14 +14,6 @@ module.exports = class SqlDatabase {
     this.db.close()
   }
 
-  async createSchema () {
-    await this.db.query(`
-      create table artists (id, name, release_id);
-      create table releases (id, name);
-      create table tracks (id integer primary key, name, number, duration, release_id);
-    `, undefined, {multiline: true})
-  }
-
   async artists () {
     return this.db.query('select id, name from artists order by name')
   }
