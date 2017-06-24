@@ -19,13 +19,60 @@ class MemoryDatabaseService {
   }
 }
 
+function describeDatabase (databaseService) {
+  describeLoadingArtistReleases(databaseService)
+
+  describe('importing', () => {
+    let db
+
+    beforeEach(async () => {
+      db = await databaseService.create()
+    })
+
+    afterEach(async () => {
+      await databaseService.stop()
+    })
+
+    it('can import an artist', async () => {
+      const artist = {
+        name: 'artist 1',
+        id: 10,
+        releases: [
+          {
+            name: 'release 1',
+            id: 1,
+            tracks: [
+              {name: 'track 1', duration: 30},
+              {name: 'track 2', duration: 30}
+            ],
+            artists: [
+              {
+                id: 10,
+                name: 'artist 1'
+              },
+              {
+                id: 20,
+                name: 'artist 2'
+              }
+            ]
+          }
+        ]
+      }
+
+      await db.addArtist(artist)
+      const importedArtist = await db.artist(artist.id)
+
+      expect(importedArtist).to.eql(artist)
+    })
+  })
+}
+
 describe('database', function () {
   describe('#memory', function () {
-    describeLoadingArtistReleases(new MemoryDatabaseService())
+    describeDatabase(new MemoryDatabaseService())
   })
 
   describe('#sql', function () {
-    describeLoadingArtistReleases(new SqlDatabaseService())
+    describeDatabase(new SqlDatabaseService())
   })
 })
-

@@ -1,100 +1,69 @@
 /* eslint-env mocha */
 const describeLoadingArtistReleases = require('./describeLoadingArtistReleases')
-const describeImportingArtist = require('./describeImportingArtist')
-const MemoryServerApi = require('../services/memoryServerApi')
-const HttpServerApi = require('../../browser/httpServerApi')
-const httpism = require('httpism')
-const MemoryDatabase = require('../services/memoryDatabase')
-const SqlDatabaseService = require('../services/sqlDatabaseService')
-const createApp = require('../../server/app')
+const expect = require('chai').expect
+const MemoryApiService = require('../services/memoryApiService')
+const HttpServerApiService = require('../services/httpServerApiService')
 
-class MemoryApiService {
-  create () {
-    this.db = new MemoryDatabase()
-    return new MemoryServerApi({db: this.db})
-  }
+function describeServerApi (serverApiService) {
+  describeLoadingArtistReleases(serverApiService)
 
-  write (data) {
-    this.db.write(data)
-  }
+  describe('import', () => {
+    let serverApi
+    let discogsArtist
 
-  stop () {
-  }
-}
+    beforeEach(async () => {
+      serverApi = await serverApiService.create()
 
-class HttpApiService {
-  async create () {
-    this.sqlDatabaseService = new SqlDatabaseService()
-    this.db = await this.sqlDatabaseService.create()
-    await new Promise(resolve => {
-      this.server = createApp({
-        db: this.db,
-        discogsUrl: 'http://localhost:6789/'
-      }).listen(4567, resolve)
-    })
-    return new HttpServerApi({
-      http: httpism.client('http://localhost:4567/')
-    })
-  }
+      discogsArtist = {
+        name: 'Polysick',
+        id: 1814667,
+        releases: [
+          {
+            name: 'Digital Native',
+            id: 123,
 
-  async write (data) {
-    await this.sqlDatabaseService.write(data)
-  }
+            artists: [
+              {
+                name: 'Polysick',
+                id: 1814667
+              }
+            ],
 
-  async stop () {
-    await this.sqlDatabaseService.stop()
-    await new Promise(resolve => {
-      this.server.close(resolve)
-    })
-  }
-}
-
-class DiscogsService {
-  async create () {
-    const db = {
-      artists: {}
-    }
-
-    const api = {
-      addArtist(id, data) {
-        db.artists[id] = data
+            tracks: [
+              {
+                duration: 159,
+                name: 'Totem'
+              },
+              {
+                duration: 100,
+                name: 'Woods'
+              }
+            ]
+          }
+        ]
       }
-    }
-    const express = require('express')
-    const app = express()
-    app.get('/artists/:artistId', (req, res) => {
-      res.send(db.artists[req.params.artistId])
+      await serverApiService.addDiscogsArtist(discogsArtist)
     })
 
-    app.get('/artists/:artistId/releases', (req, res) => {
-      res.send({
-        releases: db.artists[req.params.artistId].releases
-      })
+    afterEach(async () => {
+      await serverApiService.stop()
     })
 
-    await new Promise(resolve => {
-      this.server = app.listen(6789, resolve)
-    })
+    it('can import a new artist', async () => {
+      await serverApi.import(1814667)
+      const artist = await serverApi.artist(1814667)
 
-    return api
-  }
-
-  async stop () {
-    await new Promise(resolve => {
-      this.server.close(resolve)
+      expect(artist).to.eql(discogsArtist)
     })
-  }
+  })
 }
+
 describe('server api', function () {
   describe('#memory', function () {
-    const apiService = new MemoryApiService()
-    describeLoadingArtistReleases(apiService)
-    describeImportingArtist(apiService, new DiscogsService())
+    describeServerApi(new MemoryApiService())
   })
 
   describe('#http', function () {
-    const apiService = new HttpApiService()
-    describeLoadingArtistReleases(apiService)
-    describeImportingArtist(apiService, new DiscogsService())
+    describeServerApi(new HttpServerApiService())
   })
 })

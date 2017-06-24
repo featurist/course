@@ -1,10 +1,8 @@
 const _ = require('underscore')
 
 module.exports = class MemoryDatabase {
-  constructor ({data} = {}) {
-    if (data) {
-      this.write(data)
-    }
+  constructor ({data = {releases: []}} = {}) {
+    this.write(data)
   }
 
   write (data) {
@@ -24,6 +22,11 @@ module.exports = class MemoryDatabase {
 
   release (id) {
     return this.releasesById[id]
+  }
+
+  addArtist (artist) {
+    this.data.releases.push(...artist.releases)
+    this.write(this.data)
   }
 }
 

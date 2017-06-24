@@ -3,8 +3,9 @@
 const expect = require('chai').expect
 
 module.exports = function (databaseService) {
-  let database
   describe('load artist and releases', () => {
+    let database
+
     beforeEach(async () => {
       database = await databaseService.create()
     })
@@ -57,6 +58,37 @@ module.exports = function (databaseService) {
       ])
     })
 
+    it('returns undefined if artist not found', async () => {
+      const artist = await database.artist(3)
+      expect(artist).to.equal(undefined)
+    })
+
+    it('returns undefined if release not found', async () => {
+      const release = await database.release(3)
+      expect(release).to.equal(undefined)
+    })
+
+    it('can load release with no tracks or artists', async () => {
+      await databaseService.write({
+        releases: [
+          {
+            id: 1,
+            name: 'one',
+            artists: [],
+            tracks: []
+          }
+        ]
+      })
+
+      const release = await database.release(1)
+      expect(release).to.eql({
+        id: 1,
+        name: 'one',
+        artists: [],
+        tracks: []
+      })
+    })
+
     context('with two artists, two releases', () => {
       beforeEach(async () => {
         await databaseService.write({
@@ -98,7 +130,7 @@ module.exports = function (databaseService) {
 
       it('can load a single artist and all their releases', async () => {
         const artist = await database.artist(2)
-        expect(clone(artist)).to.eql({
+        expect(artist).to.eql({
           id: 2,
           name: 'artist 2',
           releases: [
@@ -139,7 +171,7 @@ module.exports = function (databaseService) {
 
       it('can load a single artist and only their releases', async () => {
         const artist = await database.artist(1)
-        expect(clone(artist)).to.eql({
+        expect(artist).to.eql({
           id: 1,
           name: 'artist 1',
           releases: [
@@ -201,7 +233,7 @@ module.exports = function (databaseService) {
 
       const release = await database.release(2)
 
-      expect(clone(release)).to.eql({
+      expect(release).to.eql({
         id: 2,
         name: 'two',
         artists: [
@@ -217,8 +249,4 @@ module.exports = function (databaseService) {
       })
     })
   })
-}
-
-function clone (x) {
-  return JSON.parse(JSON.stringify(x))
 }
