@@ -1,10 +1,12 @@
 const sworm = require('sworm')
+const _ = require('underscore')
 
 module.exports = class SqlDatabase {
   constructor (url) {
     this.db = sworm.db(url)
     this.schema = {
       artist: this.db.model({table: 'artists'}),
+      artistsReleases: this.db.model({table: 'artists_releases'}),
       release: this.db.model({table: 'releases'}),
       track: this.db.model({table: 'tracks'})
     }
@@ -19,6 +21,13 @@ module.exports = class SqlDatabase {
   }
 
   async write (data) {
+    const allArtists = _.flatten(data.releases.map(release => {
+      return release.artists
+    }))
+
+    const artistsById = _.indexBy(allArtists, a => a.id)
+    const artistEntitiesById = _.mapObject(artistsById, artist => this.schema.artist(artist))
+
     const releases = data.releases.map(release => {
       const tracks = release.tracks
         ? (r) => release.tracks.map((t, index) => this.schema.track({
@@ -32,11 +41,12 @@ module.exports = class SqlDatabase {
       return this.schema.release({
         id: release.id,
         name: release.name,
-        artists: (r) => release.artists.map(a => this.schema.artist({
-          id: a.id,
-          name: a.name,
-          release: r
-        })),
+        artistsReleases: (r) => release.artists.map(a => {
+          return this.schema.artistsReleases({
+            artist: artistEntitiesById[a.id],
+            release: r
+          })
+        }),
         tracks: tracks
       })
     })
@@ -74,8 +84,10 @@ module.exports = class SqlDatabase {
         t.duration as track_duration
       from
         releases r
+          inner join artists_releases ar
+            on ar.release_id = r.id
           inner join artists a
-            on a.release_id = r.id
+            on ar.artist_id = a.id
           inner join tracks t
             on t.release_id = r.id
       where
@@ -125,10 +137,14 @@ module.exports = class SqlDatabase {
         t.duration as track_duration
       from
         artists a
+          inner join artists_releases ar
+            on ar.artist_id = a.id
           inner join releases r
-            on a.release_id = r.id
+            on ar.release_id = r.id
+          inner join artists_releases rar
+            on rar.release_id = r.id
           inner join artists ra
-            on ra.release_id = r.id
+            on rar.artist_id = ra.id
           inner join tracks t
             on t.release_id = r.id
       where

@@ -17,6 +17,7 @@ module.exports = class SqlDatabaseService {
 
   async printTables () {
     await this.printTable('artists')
+    await this.printTable('artists_releases')
     await this.printTable('releases')
     await this.printTable('tracks')
   }
@@ -44,7 +45,8 @@ module.exports = class SqlDatabaseService {
 
   async createSchema () {
     await this.db.db.query(`
-      create table artists (id integer primary key, name, release_id);
+      create table artists (id integer primary key, name);
+      create table artists_releases (artist_id, release_id);
       create table releases (id integer primary key, name);
       create table tracks (id integer primary key, name, number, duration, release_id);
     `, undefined, {multiline: true})
