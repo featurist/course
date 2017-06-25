@@ -6,9 +6,15 @@
     "node": ">=7.10.0"
   },
   "scripts": {
-    "test": "npm run test-app && npm run test-unit && npm run eslint",
-    "test-app": "./electron-mocha test/browser",
+    "test": "npm run test-browser && npm run test-unit && npm run eslint",
+    "test-fake": "npm run test-browser-fake && npm run test-unit-fake",
+    "test-real": "npm run test-browser-real && npm run test-unit-real",
+    "test-browser": "./electron-mocha test/browser",
+    "test-browser-fake": "npm run test-browser -- -f '#fake'",
+    "test-browser-real": "npm run test-browser -- -f '#real'",
     "test-unit": "mocha test/unit",
+    "test-unit-fake": "npm run test-unit -- -f '#fake'",
+    "test-unit-real": "npm run test-unit -- -f '#real'",
     "eslint": "eslint --ext .js --ext .jsx .",
     "postinstall": "if [ \"$NODE_ENV\" != \"production\" ] ; then electron-rebuild -s; fi"
   },
