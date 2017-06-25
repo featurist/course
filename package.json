@@ -6,11 +6,15 @@
     "node": ">=7.10.0"
   },
   "scripts": {
-    "test": "npm run test-app && npm run test-unit && npm run eslint",
-    "test-app": "./electron-mocha test/browser",
-    "test-app-browser": "npm run test-app -- -f '#browser'",
-    "test-app-full": "npm run test-app -- -f '#full'",
+    "test": "npm run test-browser && npm run test-unit && npm run eslint",
+    "test-fake": "npm run test-browser-fake && npm run test-unit-fake",
+    "test-real": "npm run test-browser-real && npm run test-unit-real",
+    "test-browser": "./electron-mocha test/browser",
+    "test-browser-fake": "npm run test-browser -- -f '#fake'",
+    "test-browser-real": "npm run test-browser -- -f '#real'",
     "test-unit": "mocha test/unit",
+    "test-unit-fake": "npm run test-unit -- -f '#fake'",
+    "test-unit-real": "npm run test-unit -- -f '#real'",
     "eslint": "eslint --ext .js --ext .jsx .",
     "postinstall": "if [ \"$NODE_ENV\" != \"production\" ] ; then electron-rebuild -s; fi"
   },
@@ -23,17 +27,18 @@
     "browserify-middleware": "7.1.0",
     "express": "4.15.3",
     "format-duration": "1.0.0",
-    "httpism": "3.2.0",
+    "httpism": "github:featurist/httpism",
     "hyperdom": "0.9.0",
     "mz": "2.6.0",
     "sqlite3": "3.1.8",
-    "sworm": "3.7.0",
+    "sworm": "3.7.1",
     "text-table": "0.2.0",
     "underscore": "1.8.3"
   },
   "devDependencies": {
     "browser-monkey": "2.5.0",
     "chai": "^4.0.2",
+    "debug": "2.6.8",
     "disconnect": "1.1.0",
     "electron": "1.6.10",
     "electron-mocha": "3.4.0",
@@ -48,7 +53,8 @@
     "jquery": "3.2.1",
     "mocha": "3.4.2",
     "server-destroy": "1.0.1",
-    "vinehill": "0.13.0"
+    "vinehill": "0.13.0",
+    "yargs": "8.0.2"
   },
   "description": "",
   "babel": {

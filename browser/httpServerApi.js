@@ -2,7 +2,14 @@ const httpism = require('httpism')
 
 module.exports = class HttpServerApi {
   constructor ({http = httpism} = {}) {
-    this.http = http
+    this.http = http.client(
+      {
+        exceptions (response) {
+          return !(response.statusCode >= 200 || response.statusCode < 400 || response.statusCode === 404)
+        }
+      },
+      notFoundUndefinedBody
+    )
   }
 
   artists () {
@@ -16,4 +23,16 @@ module.exports = class HttpServerApi {
   release (id) {
     return this.http.get('/api/releases/:releaseId', {params: {releaseId: id}})
   }
+
+  import (id) {
+    return this.http.post('/api/import/:artistId', {}, {params: {artistId: id}})
+  }
+}
+
+async function notFoundUndefinedBody (req, next) {
+  const response = await next()
+  if (response.statusCode === 404) {
+    response.body = undefined
+  }
+  return response
 }

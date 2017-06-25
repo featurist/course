@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 
-const describeApp = require('../services/describeApp')
+const describeApp = require('./describeApp')
 
 describeApp('app', (appService) => {
   beforeEach(async () => {
@@ -17,20 +17,20 @@ describeApp('app', (appService) => {
               }
             ],
             tracks: [
-              {name: 'Journey Inwards'},
-              {name: 'Watercolours'},
-              {name: 'Rhodes To Freedom'},
-              {name: 'Our World'},
-              {name: 'Undress Your Mind'},
-              {name: 'Point Of View'},
-              {name: 'View Point'},
-              {name: 'Sunrain'},
-              {name: 'Deserted Vaults (Instrumental)'},
-              {name: 'Inner Guidance'},
-              {name: 'Close To The Source'},
-              {name: 'Suspended Space'},
-              {name: 'Unconditional Love'},
-              {name: 'Feel What You Feel'}
+              {name: 'Journey Inwards', duration: 30},
+              {name: 'Watercolours', duration: 30},
+              {name: 'Rhodes To Freedom', duration: 30},
+              {name: 'Our World', duration: 30},
+              {name: 'Undress Your Mind', duration: 30},
+              {name: 'Point Of View', duration: 30},
+              {name: 'View Point', duration: 30},
+              {name: 'Sunrain', duration: 30},
+              {name: 'Deserted Vaults (Instrumental)', duration: 30},
+              {name: 'Inner Guidance', duration: 30},
+              {name: 'Close To The Source', duration: 30},
+              {name: 'Suspended Space', duration: 30},
+              {name: 'Unconditional Love', duration: 30},
+              {name: 'Feel What You Feel', duration: 30}
             ]
           },
           {
@@ -86,7 +86,7 @@ describeApp('app', (appService) => {
   it('can display a release', async () => {
     const browser = appService.mount()
     await browser.find('.artist a', {text: 'LTJ Bukem'}).click()
-    await browser.find('.release a', {text: 'Journey Inwards'}).click()
+    await browser.find('.artist-releasesRelease a', {text: 'Journey Inwards'}).click()
     await browser.shouldHave({text: 'Watercolours'})
   })
 })

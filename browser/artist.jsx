@@ -21,11 +21,11 @@ module.exports = class Artist {
   render () {
     if (this.artist) {
       return <div>
-        <h1>{this.artist.name}</h1>
-        <ul>
+        <h1 class="artist-name">{this.artist.name}</h1>
+        <ul class="artist-releases">
           {
             this.artist.releases.map(release => {
-              return <li class="release"><a href={routes.release.href({releaseId: release.id})}>{release.name}</a></li>
+              return <li class="artist-releasesRelease"><a href={routes.release.href({releaseId: release.id})}>{release.name}</a></li>
             })
           }
         </ul>

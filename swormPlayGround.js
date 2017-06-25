@@ -1,10 +1,12 @@
-const SqlDatabaseService = require('./test/services/sqlDatabaseService');
+const RealDatabaseService = require('./test/services/realDatabaseService')
+const program = require('./tools/program')
 
-(async () => {
-  const service = new SqlDatabaseService()
+program(async () => {
+  const service = new RealDatabaseService()
   const db = (await service.create()).db
 
   const artist = db.model({table: 'artists'})
+  const artistRelease = db.model({table: 'artists_releases'})
   const release = db.model({table: 'releases'})
   const track = db.model({table: 'tracks'})
 
@@ -12,8 +14,14 @@ const SqlDatabaseService = require('./test/services/sqlDatabaseService');
     name: 'release 1',
 
     artists: (release) => [
-      artist({name: 'artist one', release: release}),
-      artist({name: 'artist two', release: release})
+      artistRelease({
+        artist: artist({name: 'artist one'}),
+        release
+      }),
+      artistRelease({
+        artist: artist({name: 'artist two'}),
+        release
+      })
     ],
 
     tracks: (release) => [
@@ -23,4 +31,4 @@ const SqlDatabaseService = require('./test/services/sqlDatabaseService');
   }).save()
 
   await service.printTables()
-})()
+})

@@ -1,10 +1,10 @@
-/* eslint-disable no-console */
 const pathUtils = require('path')
 const fs = require('mz/fs')
 const SqlDatabase = require('../../server/sqlDatabase')
 const table = require('text-table')
+const debug = require('debug')('sql')
 
-module.exports = class SqlDatabaseService {
+module.exports = class RealDatabaseService {
   async create () {
     const dbFilename = pathUtils.join(__dirname, '/test.db')
     if (await fs.exists(dbFilename)) {
@@ -15,15 +15,18 @@ module.exports = class SqlDatabaseService {
     return this.db
   }
 
-  async printTables () {
-    await this.printTable('artists')
-    await this.printTable('artists_releases')
-    await this.printTable('releases')
-    await this.printTable('tracks')
+  async printTables (log) {
+    await this.printTable('artists', log)
+    await this.printTable('artists_releases', log)
+    await this.printTable('releases', log)
+    await this.printTable('tracks', log)
   }
 
-  async printTable (tableName) {
+  async printTable (tableName, log = console.log) { // eslint-disable-line no-console
     const rows = await this.db.db.query(`select * from ${tableName}`)
+    log('')
+    log(`# ${tableName} (${rows.length})`)
+    log('')
     if (rows.length) {
       const keys = Object.keys(rows[0])
 
@@ -35,11 +38,8 @@ module.exports = class SqlDatabaseService {
       })
       tableRows.unshift(keys.map((key) => Array(key.length + 1).join('=')))
       tableRows.unshift(keys)
-      console.log()
-      console.log('# ' + tableName)
-      console.log()
-      console.log(table(tableRows).replace(/^/gm, '  '))
-      console.log()
+      log(table(tableRows).replace(/^/gm, '  '))
+      log('')
     }
   }
 
@@ -57,6 +57,7 @@ module.exports = class SqlDatabaseService {
   }
 
   async stop () {
+    await this.printTables(debug)
     await this.db.stop()
   }
 }

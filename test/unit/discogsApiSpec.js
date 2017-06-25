@@ -1,18 +1,18 @@
 const expect = require('chai').expect
+const httpism = require('httpism')
 const DiscogsApi = require('../../server/discogsApi')
+const cache = require('httpism/middleware/cache')
+const RealDiscogsApiService = require('../services/realDiscogsApiService')
+const FakeDiscogsApiService = require('../services/fakeDiscogsApiService')
 
-describe('discogs', () => {
+function describeDiscogsApi (discogsApiService) {
   let discogsApi
+  let discogsArtist
 
-  beforeEach(() => {
-    discogsApi = new DiscogsApi()
-  })
-
-  it('can download an artist', async () => {
-    const artist = await discogsApi.artist(1814667)
-    expect(artist.releases.length).to.equal(7)
-    artist.releases = [artist.releases[0]]
-    expect(artist).to.eql({
+  beforeEach(async () => {
+    discogsApi = await discogsApiService.create()
+    discogsArtist = {
+      id: 1814667,
       name: 'Polysick',
       releases: [
         {
@@ -88,6 +88,45 @@ describe('discogs', () => {
           ]
         }
       ]
+    }
+    discogsApiService.addArtist(discogsArtist)
+  })
+
+  afterEach(async () => {
+    await discogsApiService.stop()
+  })
+
+  it('can download an artist', async () => {
+    const artist = await discogsApi.artist(1814667)
+    artist.releases = [artist.releases[0]]
+    expect(artist).to.eql(discogsArtist)
+  })
+}
+
+class LiveDiscogsApiService {
+  create () {
+    return new DiscogsApi({
+      http: httpism.client(cache({url: `${__dirname}/discogs-cache`}))
     })
+  }
+
+  addArtist () {
+  }
+
+  stop () {
+  }
+}
+
+describe('discogs api', () => {
+  describe('#fake', () => {
+    describeDiscogsApi(new FakeDiscogsApiService())
+  })
+
+  describe('#real', () => {
+    describeDiscogsApi(new RealDiscogsApiService())
+  })
+
+  describe('#live', () => {
+    describeDiscogsApi(new LiveDiscogsApiService())
   })
 })

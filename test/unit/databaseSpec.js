@@ -1,27 +1,78 @@
 /* eslint-env mocha */
+const expect = require('chai').expect
 
-const MemoryDatabase = require('../services/memoryDatabase')
-const SqlDatabaseService = require('../services/sqlDatabaseService')
-const describeDatabase = require('./describeDatabase')
+const FakeDatabase = require('../services/fakeDatabase')
+const RealDatabaseService = require('../services/realDatabaseService')
+const describeLoadingArtistReleases = require('./describeLoadingArtistReleases')
 
-describe('database', function () {
-  describe('#memory', function () {
-    describeDatabase({
-      create () {
-        this.db = new MemoryDatabase()
-        return this.db
-      },
+class MemoryDatabaseService {
+  create () {
+    this.db = new FakeDatabase()
+    return this.db
+  }
 
-      write (data) {
-        this.db.write(data)
-      },
+  write (data) {
+    this.db.write(data)
+  }
 
-      stop () {
+  stop () {
+  }
+}
+
+function describeDatabase (databaseService) {
+  describeLoadingArtistReleases(databaseService)
+
+  describe('importing', () => {
+    let db
+
+    beforeEach(async () => {
+      db = await databaseService.create()
+    })
+
+    afterEach(async () => {
+      await databaseService.stop()
+    })
+
+    it('can import an artist', async () => {
+      const artist = {
+        name: 'artist 1',
+        id: 10,
+        releases: [
+          {
+            name: 'release 1',
+            id: 1,
+            tracks: [
+              {name: 'track 1', duration: 30},
+              {name: 'track 2', duration: 30}
+            ],
+            artists: [
+              {
+                id: 10,
+                name: 'artist 1'
+              },
+              {
+                id: 20,
+                name: 'artist 2'
+              }
+            ]
+          }
+        ]
       }
+
+      await db.addArtist(artist)
+      const importedArtist = await db.artist(artist.id)
+
+      expect(importedArtist).to.eql(artist)
     })
   })
+}
 
-  describe('#sql', function () {
-    describeDatabase(new SqlDatabaseService())
+describe('database', function () {
+  describe('#fake', function () {
+    describeDatabase(new MemoryDatabaseService())
+  })
+
+  describe('#real', function () {
+    describeDatabase(new RealDatabaseService())
   })
 })

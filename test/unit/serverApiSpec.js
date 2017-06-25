@@ -1,51 +1,69 @@
 /* eslint-env mocha */
+const describeLoadingArtistReleases = require('./describeLoadingArtistReleases')
+const expect = require('chai').expect
+const FakeServerApiService = require('../services/fakeServerApiService')
+const RealServerApiService = require('../services/realServerApiService')
 
-const describeDatabase = require('./describeDatabase')
-const MemoryServerApi = require('../services/memoryServerApi')
-const HttpServerApi = require('../../browser/httpServerApi')
-const httpism = require('httpism')
-const MemoryDatabase = require('../services/memoryDatabase')
-const SqlDatabaseService = require('../services/sqlDatabaseService')
-const createApp = require('../../server/app')
+function describeServerApi (serverApiService) {
+  describeLoadingArtistReleases(serverApiService)
 
-function describeServerApi (setup) {
-  describeDatabase(setup)
+  describe('import', () => {
+    let serverApi
+    let discogsArtist
+
+    beforeEach(async () => {
+      serverApi = await serverApiService.create()
+
+      discogsArtist = {
+        name: 'Polysick',
+        id: 1814667,
+        releases: [
+          {
+            name: 'Digital Native',
+            id: 123,
+
+            artists: [
+              {
+                name: 'Polysick',
+                id: 1814667
+              }
+            ],
+
+            tracks: [
+              {
+                duration: 159,
+                name: 'Totem'
+              },
+              {
+                duration: 100,
+                name: 'Woods'
+              }
+            ]
+          }
+        ]
+      }
+      await serverApiService.addDiscogsArtist(discogsArtist)
+    })
+
+    afterEach(async () => {
+      await serverApiService.stop()
+    })
+
+    it('can import a new artist', async () => {
+      await serverApi.import(1814667)
+      const artist = await serverApi.artist(1814667)
+
+      expect(artist).to.eql(discogsArtist)
+    })
+  })
 }
 
 describe('server api', function () {
-  describe('#memory', function () {
-    describeServerApi({
-      create () {
-        this.db = new MemoryDatabase()
-        return new MemoryServerApi({db: this.db})
-      },
-
-      write (data) {
-        this.db.write(data)
-      },
-
-      stop () {
-      }
-    })
+  describe('#fake', function () {
+    describeServerApi(new FakeServerApiService())
   })
 
-  describe('#http', function () {
-    describeServerApi({
-      async create () {
-        this.sqlDatabaseService = new SqlDatabaseService()
-        this.db = await this.sqlDatabaseService.create()
-        this.server = createApp({db: this.db}).listen(4567)
-        return new HttpServerApi({http: httpism.client('http://localhost:4567/')})
-      },
-
-      async write (data) {
-        await this.sqlDatabaseService.write(data)
-      },
-
-      async stop () {
-        await this.sqlDatabaseService.stop()
-        this.server.close()
-      }
-    })
+  describe('#real', function () {
+    describeServerApi(new RealServerApiService())
   })
 })
