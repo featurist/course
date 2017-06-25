@@ -1,4 +1,5 @@
 const httpism = require('httpism')
+const timeToSeconds = require('./timeToSeconds')
 
 module.exports = class DiscogsApi {
   constructor ({url = 'https://api.discogs.com/', http = httpism}) {
@@ -39,13 +40,5 @@ module.exports = class DiscogsApi {
       name: artist.name,
       releases
     }
-  }
-}
-
-function timeToSeconds (time) {
-  const match = /^((\d+):)?(\d+):(\d+)$/.exec(time)
-  if (match) {
-    const [, , hours = 0, minutes, seconds] = match
-    return Number(hours) * 3600 + Number(minutes) * 60 + Number(seconds)
   }
 }

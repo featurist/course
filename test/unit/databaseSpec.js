@@ -4,6 +4,8 @@ const expect = require('chai').expect
 const FakeDatabase = require('../services/fakeDatabase')
 const RealDatabaseService = require('../services/realDatabaseService')
 const describeLoadingArtistReleases = require('./describeLoadingArtistReleases')
+const ArtistBuilder = require('../builders/artistBuilder')
+const ReleaseBuilder = require('../builders/releaseBuilder')
 
 class MemoryDatabaseService {
   create () {
@@ -34,30 +36,21 @@ function describeDatabase (databaseService) {
     })
 
     it('can import an artist', async () => {
-      const artist = {
-        name: 'artist 1',
-        id: 10,
-        releases: [
-          {
-            name: 'release 1',
-            id: 1,
-            tracks: [
-              {name: 'track 1', duration: 30},
-              {name: 'track 2', duration: 30}
-            ],
-            artists: [
-              {
-                id: 10,
-                name: 'artist 1'
-              },
-              {
-                id: 20,
-                name: 'artist 2'
-              }
-            ]
-          }
-        ]
-      }
+      const artist = new ArtistBuilder()
+        .withName('artist 1')
+        .withId(10)
+        .withReleases([
+          new ReleaseBuilder()
+            .withName('release 1')
+            .withId(1)
+            .withArtists([
+              new ArtistBuilder().withName('artist 1').withId(10).build(),
+              new ArtistBuilder().withName('artist 2').withId(20).build()
+            ])
+            .withTracks(2)
+            .build()
+        ])
+        .build()
 
       await db.addArtist(artist)
       const importedArtist = await db.artist(artist.id)

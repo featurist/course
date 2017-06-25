@@ -1,4 +1,7 @@
 const describeApp = require('./describeApp')
+const ArtistBuilder = require('../builders/artistBuilder')
+const ReleaseBuilder = require('../builders/releaseBuilder')
+const TrackBuilder = require('../builders/trackBuilder')
 
 describeApp('import page', (appService) => {
   let discogsArtist
@@ -6,34 +9,20 @@ describeApp('import page', (appService) => {
   beforeEach(async () => {
     await appService.start()
 
-    discogsArtist = {
-      name: 'Polysick',
-      id: 1814667,
-      releases: [
-        {
-          name: 'Digital Native',
-          id: 123,
-
-          artists: [
-            {
-              name: 'Polysick',
-              id: 1814667
-            }
-          ],
-
-          tracks: [
-            {
-              duration: 159,
-              name: 'Totem'
-            },
-            {
-              duration: 100,
-              name: 'Woods'
-            }
-          ]
-        }
-      ]
-    }
+    discogsArtist = new ArtistBuilder()
+      .withName('Polysick')
+      .withId(1814667)
+      .withReleases([
+        new ReleaseBuilder()
+          .withName('Digital Native')
+          .withId(123)
+          .withTracks([
+            new TrackBuilder().withName('Totem').withDuration(159).build(),
+            new TrackBuilder().withName('Woods').withDuration(100).build()
+          ])
+          .build()
+      ])
+      .build()
 
     await appService.addDiscogsArtist(discogsArtist)
   })

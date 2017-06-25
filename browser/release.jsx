@@ -22,7 +22,7 @@ module.exports = class Release {
   render () {
     if (this.release) {
       return <div>
-        <h1>{this.release.name}</h1>
+        <h1 class="release-name">{this.release.name}</h1>
         <ul>
           {
             this.release.tracks.map(track => <li class="release-track">
