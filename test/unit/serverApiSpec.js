@@ -7,6 +7,38 @@ const RealServerApiService = require('../services/realServerApiService')
 function describeServerApi (serverApiService) {
   describeLoadingArtistReleases(serverApiService)
 
+  describe.only('loading artists and releases', () => {
+    let serverApi
+
+    beforeEach(async () => {
+      serverApi = await serverApiService.create()
+    })
+
+    afterEach(async () => {
+      await serverApiService.stop()
+    })
+
+    it('can load all artists', async () => {
+      // setup
+      await serverApiService.write({
+        releases: [
+        ]
+      })
+
+      // ensure that we can load all artists
+    })
+
+    it('can load a release', async () => {
+      // setup
+      await serverApiService.write({
+        releases: [
+        ]
+      })
+
+      // ensure that we can load a release
+    })
+  })
+
   describe('import', () => {
     let serverApi
     let discogsArtist
@@ -50,10 +82,7 @@ function describeServerApi (serverApiService) {
     })
 
     it('can import a new artist', async () => {
-      await serverApi.import(1814667)
-      const artist = await serverApi.artist(1814667)
-
-      expect(artist).to.eql(discogsArtist)
+      // ensure that we can import an artist
     })
   })
 }
