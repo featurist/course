@@ -36,7 +36,7 @@
     "underscore": "1.8.3"
   },
   "devDependencies": {
-    "browser-monkey": "2.5.0",
+    "browser-monkey": "2.7.0",
     "chai": "^4.0.2",
     "debug": "2.6.8",
     "disconnect": "1.1.0",
