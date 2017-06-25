@@ -1,12 +1,12 @@
-const HttpServerApiService = require('../services/httpServerApiService')
+const RealServerApiService = require('../services/realServerApiService')
 const httpism = require('httpism')
 const urlUtils = require('url')
 const mountIFrame = require('browser-monkey/iframe')
 
-module.exports = class AppService {
+module.exports = class RealAppService {
   constructor ({port = 7000} = {}) {
     this.port = port
-    this.serverApiService = new HttpServerApiService()
+    this.serverApiService = new RealServerApiService()
   }
 
   async start ({data} = {}) {

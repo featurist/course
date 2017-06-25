@@ -8,8 +8,6 @@
   "scripts": {
     "test": "npm run test-app && npm run test-unit && npm run eslint",
     "test-app": "./electron-mocha test/browser",
-    "test-app-browser": "npm run test-app -- -f '#browser'",
-    "test-app-full": "npm run test-app -- -f '#full'",
     "test-unit": "mocha test/unit",
     "eslint": "eslint --ext .js --ext .jsx .",
     "postinstall": "if [ \"$NODE_ENV\" != \"production\" ] ; then electron-rebuild -s; fi"

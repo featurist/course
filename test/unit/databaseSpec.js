@@ -1,13 +1,13 @@
 /* eslint-env mocha */
 const expect = require('chai').expect
 
-const MemoryDatabase = require('../services/memoryDatabase')
-const SqlDatabaseService = require('../services/sqlDatabaseService')
+const FakeDatabase = require('../services/fakeDatabase')
+const RealDatabaseService = require('../services/realDatabaseService')
 const describeLoadingArtistReleases = require('./describeLoadingArtistReleases')
 
 class MemoryDatabaseService {
   create () {
-    this.db = new MemoryDatabase()
+    this.db = new FakeDatabase()
     return this.db
   }
 
@@ -68,11 +68,11 @@ function describeDatabase (databaseService) {
 }
 
 describe('database', function () {
-  describe('#memory', function () {
+  describe('#fake', function () {
     describeDatabase(new MemoryDatabaseService())
   })
 
-  describe('#sql', function () {
-    describeDatabase(new SqlDatabaseService())
+  describe('#real', function () {
+    describeDatabase(new RealDatabaseService())
   })
 })

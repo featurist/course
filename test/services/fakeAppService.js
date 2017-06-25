@@ -1,13 +1,13 @@
 const App = require('../../browser/app')
-const MemoryServerApiService = require('./memoryServerApiService')
+const FakeServerApiService = require('./fakeServerApiService')
 const mountHyperdom = require('browser-monkey/hyperdom')
 const router = require('hyperdom/router')
 
 require('browser-monkey/lib/reloadButton')()
 
-module.exports = class BrowserAppService {
+module.exports = class FakeAppService {
   async start ({data = {releases: []}} = {}) {
-    this.serverApiService = new MemoryServerApiService()
+    this.serverApiService = new FakeServerApiService()
     const serverApi = await this.serverApiService.create(data)
     await this.serverApiService.write(data)
     this.app = new App({serverApi})

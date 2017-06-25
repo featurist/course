@@ -2,7 +2,7 @@ const DiscogsApi = require('../../server/discogsApi')
 const _ = require('underscore')
 const formatDuration = require('format-duration')
 
-module.exports = class HttpDiscogsApiService {
+module.exports = class RealDiscogsApiService {
   constructor ({port = 6789} = {}) {
     this.artists = {}
     this.port = port

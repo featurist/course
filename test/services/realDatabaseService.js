@@ -4,7 +4,7 @@ const SqlDatabase = require('../../server/sqlDatabase')
 const table = require('text-table')
 const debug = require('debug')('sql')
 
-module.exports = class SqlDatabaseService {
+module.exports = class RealDatabaseService {
   async create () {
     const dbFilename = pathUtils.join(__dirname, '/test.db')
     if (await fs.exists(dbFilename)) {

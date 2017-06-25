@@ -1,8 +1,8 @@
 /* eslint-env mocha */
 const describeLoadingArtistReleases = require('./describeLoadingArtistReleases')
 const expect = require('chai').expect
-const MemoryServerApiService = require('../services/memoryServerApiService')
-const HttpServerApiService = require('../services/httpServerApiService')
+const FakeServerApiService = require('../services/fakeServerApiService')
+const RealServerApiService = require('../services/realServerApiService')
 
 function describeServerApi (serverApiService) {
   describeLoadingArtistReleases(serverApiService)
@@ -59,11 +59,11 @@ function describeServerApi (serverApiService) {
 }
 
 describe('server api', function () {
-  describe('#memory', function () {
-    describeServerApi(new MemoryServerApiService())
+  describe('#fake', function () {
+    describeServerApi(new FakeServerApiService())
   })
 
-  describe('#http', function () {
-    describeServerApi(new HttpServerApiService())
+  describe('#real', function () {
+    describeServerApi(new RealServerApiService())
   })
 })

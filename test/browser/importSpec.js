@@ -1,4 +1,4 @@
-const describeApp = require('../services/describeApp')
+const describeApp = require('./describeApp')
 
 describeApp('import page', (appService) => {
   let discogsArtist

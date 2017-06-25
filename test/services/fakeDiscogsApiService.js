@@ -8,7 +8,7 @@ class MemoryDiscogsApi {
   }
 }
 
-module.exports = class MemoryDiscogsApiService {
+module.exports = class FakeDiscogsApiService {
   constructor () {
     this.artists = {}
   }

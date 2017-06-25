@@ -1,8 +1,8 @@
-const SqlDatabaseService = require('./test/services/sqlDatabaseService')
+const RealDatabaseService = require('./test/services/realDatabaseService')
 const program = require('./tools/program')
 
 program(async () => {
-  const service = new SqlDatabaseService()
+  const service = new RealDatabaseService()
   const db = (await service.create()).db
 
   const artist = db.model({table: 'artists'})

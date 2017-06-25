@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 
-const describeApp = require('../services/describeApp')
+const describeApp = require('./describeApp')
 const routes = require('../../browser/routes')
 const expect = require('chai').expect
 const $ = require('jquery')

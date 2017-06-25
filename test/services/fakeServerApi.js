@@ -1,4 +1,4 @@
-module.exports = class MemoryServerApi {
+module.exports = class FakeServerApi {
   constructor ({db, discogsApi}) {
     this.db = db
     this.discogsApi = discogsApi

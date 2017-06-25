@@ -2,7 +2,8 @@ const expect = require('chai').expect
 const httpism = require('httpism')
 const DiscogsApi = require('../../server/discogsApi')
 const cache = require('httpism/middleware/cache')
-const HttpDiscogsApiService = require('../services/httpDiscogsApiService')
+const RealDiscogsApiService = require('../services/realDiscogsApiService')
+const FakeDiscogsApiService = require('../services/fakeDiscogsApiService')
 
 function describeDiscogsApi (discogsApiService) {
   let discogsApi
@@ -102,7 +103,7 @@ function describeDiscogsApi (discogsApiService) {
   })
 }
 
-class RealDiscogsApiService {
+class LiveDiscogsApiService {
   create () {
     return new DiscogsApi({
       http: httpism.client(cache({url: `${__dirname}/discogs-cache`}))
@@ -117,11 +118,15 @@ class RealDiscogsApiService {
 }
 
 describe('discogs api', () => {
-  describe('#http', () => {
-    describeDiscogsApi(new HttpDiscogsApiService())
+  describe('#fake', () => {
+    describeDiscogsApi(new FakeDiscogsApiService())
   })
 
-  describe('#discogs', () => {
+  describe('#real', () => {
     describeDiscogsApi(new RealDiscogsApiService())
+  })
+
+  describe('#live', () => {
+    describeDiscogsApi(new LiveDiscogsApiService())
   })
 })

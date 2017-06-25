@@ -1,6 +1,6 @@
 const _ = require('underscore')
 
-module.exports = class MemoryDatabase {
+module.exports = class FakeDatabase {
   constructor ({data = {releases: []}} = {}) {
     this.write(data)
   }
