@@ -49,7 +49,8 @@
     "jquery": "3.2.1",
     "mocha": "3.4.2",
     "server-destroy": "1.0.1",
-    "vinehill": "0.13.0"
+    "vinehill": "0.13.0",
+    "yargs": "8.0.2"
   },
   "description": "",
   "babel": {
