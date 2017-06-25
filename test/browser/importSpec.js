@@ -33,9 +33,5 @@ describeApp('import page', (appService) => {
 
   it('shows all tracks with their durations', async () => {
     const app = appService.mount()
-    await app.find('.import-url').typeIn('https://www.discogs.com/artist/1814667-Polysick')
-    await app.find('.import-button').click()
-    await app.find('.imported-artist-link').click()
-    await app.find('.artist-name').shouldHave({text: 'Polysick'})
   })
 })
