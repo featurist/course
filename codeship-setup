@@ -1,2 +1,2 @@
 nvm install v8
-npm i -d
+yarn install
