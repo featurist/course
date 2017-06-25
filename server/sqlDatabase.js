@@ -44,7 +44,7 @@ module.exports = class SqlDatabase {
     }, {saved: existing})
   }
 
-  async write (data) {
+  async write (data = {releases: []}) {
     const allArtists = _.flatten(data.releases.map(release => {
       return release.artists
     }))

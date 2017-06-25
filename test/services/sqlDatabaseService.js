@@ -22,7 +22,7 @@ module.exports = class SqlDatabaseService {
     await this.printTable('tracks', log)
   }
 
-  async printTable (tableName, log = console.log) {
+  async printTable (tableName, log = console.log) { // eslint-disable-line no-console
     const rows = await this.db.db.query(`select * from ${tableName}`)
     log('')
     log(`# ${tableName} (${rows.length})`)

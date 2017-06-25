@@ -2,7 +2,7 @@ const MemoryServerApi = require('../services/memoryServerApi')
 const MemoryDatabase = require('../services/memoryDatabase')
 const MemoryDiscogsApiService = require('../services/memoryDiscogsApiService')
 
-module.exports = class MemoryApiService {
+module.exports = class MemoryServiceApiService {
   create () {
     this.db = new MemoryDatabase()
     this.discogsApiService = new MemoryDiscogsApiService()
